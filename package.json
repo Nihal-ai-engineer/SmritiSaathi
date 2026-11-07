@@ -1,0 +1,51 @@
+{
+  "name": "smritisaathi",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:api": "node --env-file=.env --watch server/index.js",
+    "dev:web": "vite",
+    "build": "tsc --noEmit && vite build",
+    "start": "node --env-file=.env server/index.js",
+    "db:migrate": "node --env-file=.env server/migrate.js",
+    "services": "docker compose up -d",
+    "test": "node --env-file=.env --test tests/*.test.js",
+    "local": "pnpm services && pnpm db:migrate && pnpm dev",
+    "mobile": "bash scripts/mobile-local.sh",
+    "tailnet": "bash scripts/tailnet-local.sh"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/multipart": "^9.3.0",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/static": "^10.1.5",
+    "@mlc-ai/web-llm": "^0.2.82",
+    "@simplewebauthn/browser": "^14.0.0",
+    "@simplewebauthn/server": "^14.0.3",
+    "argon2": "^0.44.0",
+    "fastify": "^5.7.0",
+    "google-auth-library": "^11.1.0",
+    "ioredis": "^5.8.1",
+    "lucide-react": "1.31.0",
+    "nodemailer": "^10.0.11",
+    "pg": "^8.16.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.13"
+  }
+}

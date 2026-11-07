@@ -1,0 +1,26 @@
+name: smritisaathi-local
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: smriti
+      POSTGRES_PASSWORD: local-smriti-only
+      POSTGRES_DB: smritisaathi
+    ports: ["127.0.0.1:55432:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smriti -d smritisaathi"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:56379:6379"]
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis-data:/data"]
+  mail:
+    image: axllent/mailpit:latest
+    ports: ["127.0.0.1:51025:1025", "127.0.0.1:58025:8025"]
+volumes:
+  postgres-data:
+  redis-data:
