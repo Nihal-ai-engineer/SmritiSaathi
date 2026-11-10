@@ -7,7 +7,8 @@ A phone-first private care space for user-supplied memories, familiar people, ro
 Install Node.js 24+, pnpm and Docker Desktop. Start Docker, then run:
 
 ```sh
-cd /Users/nihaljanjua/Downloads/SmritiSaathi
+cd /you-local-path
+
 pnpm install
 pnpm local
 ```
