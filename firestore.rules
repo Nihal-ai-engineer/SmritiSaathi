@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/entries/{entryId} {
+      function owner() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function valid() {
+        let d = request.resource.data;
+        let fields = ['kind', 'title', 'note', 'photo', 'time', 'doneDay', 'createdAt'];
+        return d.keys().hasAll(fields) && d.keys().hasOnly(fields)
+          && d.kind in ['memory', 'person', 'reminder']
+          && d.title is string && d.title.size() > 0 && d.title.size() <= 120
+          && d.note is string && d.note.size() <= 2000
+          && d.photo is string && d.photo.size() <= 400040
+          && (d.photo == '' || d.photo.matches('data:image/(jpeg|png|webp);base64,.*'))
+          && d.time is string && d.doneDay is string
+          && (d.kind == 'reminder' ? (d.photo == '' && d.time.matches('([01][0-9]|2[0-3]):[0-5][0-9]')
+            && (d.doneDay == '' || d.doneDay.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}'))) : (d.time == '' && d.doneDay == ''))
+          && d.createdAt is int && d.createdAt > 0;
+      }
+      allow read, delete: if owner();
+      allow create: if owner() && valid();
+      allow update: if owner() && valid()
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.kind == resource.data.kind;
+    }
+  }
+}
