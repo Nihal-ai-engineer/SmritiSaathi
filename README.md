@@ -2,7 +2,7 @@
 
 A private space to save memories, familiar people and daily reminders. The React frontend keeps the original teal care-space layout. Firebase Authentication handles accounts, and the browser reads and writes Firestore records directly.
 
-## Run the local demo
+## Run locally
 
 Install Node.js 24 and Java 21 or newer. In one terminal, run:
 
@@ -13,7 +13,7 @@ In another terminal, run:
 
     VITE_USE_EMULATORS=true npm run dev -- --host 127.0.0.1 --port 5178
 
-Open http://127.0.0.1:5178 and create a demo account. The local database starts empty unless you import emulator data. Use sample photos and notes for demonstrations.
+Open http://127.0.0.1:5178 and create a test account. The local database starts empty unless you import emulator data. Use sample photos and notes when presenting the app.
 
 To use an existing Firebase project, copy .env.example to .env and fill in the web app settings. Enable Email/Password sign-in and deploy the owner-only rules for the app's records before running it. Do not overwrite the rules of a Firebase project shared with another application.
 
@@ -29,9 +29,9 @@ To use an existing Firebase project, copy .env.example to .env and fill in the w
 
 Each record is stored under users/{uid}/entries/{entryId}. Firestore rules check the signed-in user's ID before permitting a read or write. Photos are optional and limited to 300 KB. The app stores them with the entry and uses Firestore access rules for privacy.
 
-## Proposed individual demo roles
+## Team presentation roles
 
-Each team member can sign in with their own demo account and walk through their assigned flow independently.
+Each team member can sign in with their own test account and walk through their assigned flow independently.
 
 | Team member | Show live | Explain |
 | --- | --- | --- |
