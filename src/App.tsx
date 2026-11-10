@@ -26,14 +26,14 @@ import {
   type Kind,
 } from "./records";
 
-const pages = [
+type View = "home" | Kind;
+
+const pages: { id: View; label: string; icon: typeof Home }[] = [
   { id: "home", label: "Today", icon: Home },
   { id: "memory", label: "My memories", icon: BookHeart },
   { id: "person", label: "People I know", icon: Users },
   { id: "reminder", label: "My reminders", icon: Bell },
-] as const;
-
-type View = (typeof pages)[number]["id"];
+];
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -63,6 +63,7 @@ export default function App() {
         Opening your care space…
       </p>
     );
+  // A different account gets a new care space with empty state.
   return user ? <CareSpace key={user.uid} user={user} /> : <Auth />;
 }
 
@@ -79,20 +80,16 @@ function CareSpace({ user }: { user: User }) {
   const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
-    let active = true;
-    loadEntries(user.uid)
-      .then((items) => {
-        if (active) setEntries(items);
-      })
-      .catch(() => {
-        if (active) setError("Could not load your care records.");
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
+    async function openCareSpace() {
+      try {
+        setEntries(await loadEntries(user.uid));
+      } catch {
+        setError("Could not load your care records.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    openCareSpace();
   }, [user.uid]);
 
   const today = new Date().toLocaleDateString("en-CA");
